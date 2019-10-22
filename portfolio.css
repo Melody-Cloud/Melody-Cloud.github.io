@@ -1,0 +1,325 @@
+body {
+    background: #547980;
+    font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+header.masthead {
+    text-align: center;
+    color: white;
+    background-size: cover;
+}
+
+#mainNav {
+    background-color: #212529;
+}
+
+#mainNav .navbar-toggler {
+    font-size: 12px;
+    right: 0;
+    padding: 13px;
+    text-transform: uppercase;
+    color: white;
+    border: 0;
+    background-color: #45ADA8;
+}
+
+#mainNav .navbar-brand {
+    color: #45ADA8;
+}
+
+#mainNav .navbar-brand.active, #mainNav .navbar-brand:active, #mainNav .navbar-brand:focus, #mainNav .navbar-brand:hover {
+    color: #18ad71;
+}
+
+#mainNav .navbar-nav .nav-item .nav-link {
+    font-size: 90%;
+    font-weight: 400;
+    padding: 0.75em 0;
+    letter-spacing: 1px;
+    color: white;
+}
+
+#mainNav .navbar-nav .nav-item {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+#mainNav .navbar-nav .nav-item .nav-link.active, #mainNav .navbar-nav .nav-item .nav-link:hover {
+    color: #45ADA8;
+}
+
+header.masthead {
+    text-align: center;
+    color: white;
+    background-image: url("mainPicFullHD.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom center;
+    background-size: cover;
+}
+
+header.masthead .intro-text {
+    padding-top: 150px;
+    padding-bottom: 100px;
+}
+
+header.masthead .intro-text .intro-lead-in {
+    font-size: 22px;
+    font-style: italic;
+    line-height: 22px;
+    margin-bottom: 25px;
+}
+
+header.masthead .intro-text .intro-heading {
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 50px;
+    margin-bottom: 25px;
+}
+
+.see-projects-button {
+    margin-top: 4rem;
+    background-color: #126880;
+    border-color: #126880;
+}
+
+.technologies-section, .contact-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    background-color: #212529;
+    color: #45ADA8;
+}
+
+.technologies-section .list-group .list-group-item {
+    background-color: #99B2B7;
+}
+
+.technologies-section h4, .contact-section h3 {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+
+
+
+@media (min-width: 768px) {
+    /* show 3 items */
+    .carousel-inner .active,
+    .carousel-inner .active + .carousel-item,
+    .carousel-inner .active + .carousel-item + .carousel-item {
+        display: block;
+    }
+
+    .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left),
+    .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item,
+    .carousel-inner .carousel-item.active:not(.carousel-item-right):not(.carousel-item-left) + .carousel-item + .carousel-item {
+        transition: none;
+    }
+
+    .carousel-inner .carousel-item-next,
+    .carousel-inner .carousel-item-prev {
+        position: relative;
+        transform: translate3d(0, 0, 0);
+    }
+
+    .carousel-inner .active.carousel-item + .carousel-item + .carousel-item + .carousel-item {
+        position: absolute;
+        top: 0;
+        right: -33.3333%;
+        z-index: -1;
+        display: block;
+        visibility: visible;
+    }
+
+    /* left or forward direction */
+    .active.carousel-item-left + .carousel-item-next.carousel-item-left,
+    .carousel-item-next.carousel-item-left + .carousel-item,
+    .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item,
+    .carousel-item-next.carousel-item-left + .carousel-item + .carousel-item + .carousel-item {
+        position: relative;
+        transform: translate3d(-100%, 0, 0);
+        visibility: visible;
+    }
+
+    /* farthest right hidden item must be abso position for animations */
+    .carousel-inner .carousel-item-prev.carousel-item-right {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        display: block;
+        visibility: visible;
+    }
+
+    /* right or prev direction */
+    .active.carousel-item-right + .carousel-item-prev.carousel-item-right,
+    .carousel-item-prev.carousel-item-right + .carousel-item,
+    .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item,
+    .carousel-item-prev.carousel-item-right + .carousel-item + .carousel-item + .carousel-item {
+        position: relative;
+        transform: translate3d(100%, 0, 0);
+        visibility: visible;
+        display: block;
+        visibility: visible;
+    }
+}
+
+.projects-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    background-color: #9db1c0;
+}
+
+.projects-section h2 {
+    margin-bottom: 2rem;
+    color: black;
+}
+
+.spring-card {
+    background-image: url("https://cdn.worldvectorlogo.com/logos/spring-3.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    /*filter: blur(3px);*/
+    height: 444px;
+}
+
+.nano-server-card {
+    background-image: url("https://www.logolynx.com/images/logolynx/5a/5a878973d26e7d5a5ccfd02a186d20dc.jpeg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    /*filter: blur(3px);*/
+    height: 444px;
+}
+
+.draughts-card {
+    background-image: url("https://raw.githubusercontent.com/szymonsadowski3/DistributedDraughts/master/docs/exampleRun.PNG");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    /*filter: blur(3px);*/
+    height: 444px;
+}
+
+.game-of-life-card {
+    background-image: url("https://cdn.freebiesupply.com/logos/thumbs/2x/flask-logo.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    /*filter: blur(3px);*/
+    height: 444px;
+}
+
+
+.repository-button {
+    text-align: center;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    height: 100px;
+    width: 100px;
+    outline: black;
+    background-size: 100%, 100%;
+    border-radius: 50%;
+    background-image: none;
+}
+
+.carousel-control-next-icon:after
+{
+    content: '>';
+    font-size: 55px;
+    color: black;
+}
+
+.carousel-control-prev-icon:after {
+    content: '<';
+    font-size: 55px;
+    color: black;
+}
+
+.code-img-section {
+    height: 300px;
+    background-image: url("codeFullHD.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: bottom center;
+    background-size: cover;
+}
+
+.about-me-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    background-color: #212529;
+    color: #45ADA8;
+}
+
+.about-me-section h2, .about-me-section h3 {
+    margin-bottom: 2rem;
+}
+
+.grid-img {
+    object-fit: cover;
+    width:600px;
+    height:400px;
+}
+
+.contact-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    background-color: #9db1c0;
+    color: black;
+}
+
+.contact-section h2, .contact-section h3 {
+    margin-bottom: 2rem;
+    color: black;
+}
+
+.contact-section p {
+    margin-top: 2rem;
+}
+
+.social-media-section {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    background-color: #212529;
+    color: #45ADA8;
+}
+
+.social-media-section h2 {
+
+}
+
+.figure-caption {
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 18px;
+    color: #86cfda;
+}
+
+.social-media-label {
+    font-size: 20px;
+}
+
+.social-media-icon:hover i {
+    color: #86cfda;
+    transition: color .5s;
+    cursor: pointer;
+}
+
+footer {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .technologies-entry {
+        margin-top: 2rem;
+    }
+
+    .gallery-wrapper {
+        text-align: center;
+    }
+}
