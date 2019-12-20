@@ -1,474 +1,256 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="utf-8">
+  <title>Wycieczki</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" integrity="sha256-46qynGAkLSFpVbEBog43gvNhfrOj+BmwXdxFgVK/Kvc=" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://openlayers.org/en/v4.6.5/css/ol.css" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Lato', 'Roboto', sans-serif;
+    }
+    /* based on angular-toastr css https://github.com/Foxandxss/angular-toastr/blob/cb508fe6801d6b288d3afc525bb40fee1b101650/dist/angular-toastr.css */
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    /* position */
+    .toast-center-center {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    .toast-top-center {
+      top: 0;
+      right: 0;
+      width: 100%;
+    }
+    .toast-bottom-center {
+      bottom: 0;
+      right: 0;
+      width: 100%;
+    }
+    .toast-top-full-width {
+      top: 0;
+      right: 0;
+      width: 100%;
+    }
+    .toast-bottom-full-width {
+      bottom: 0;
+      right: 0;
+      width: 100%;
+    }
+    .toast-top-left {
+      top: 12px;
+      left: 12px;
+    }
+    .toast-top-right {
+      top: 12px;
+      right: 12px;
+    }
+    .toast-bottom-right {
+      right: 12px;
+      bottom: 12px;
+    }
+    .toast-bottom-left {
+      bottom: 12px;
+      left: 12px;
+    }
 
-    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+    /* toast styles */
+    .toast-title {
+      font-weight: bold;
+    }
+    .toast-message {
+      word-wrap: break-word;
+    }
+    .toast-message a,
+    .toast-message label {
+      color: #FFFFFF;
+    }
+    .toast-message a:hover {
+      color: #CCCCCC;
+      text-decoration: none;
+    }
+    .toast-close-button {
+      position: relative;
+      right: -0.3em;
+      top: -0.3em;
+      float: right;
+      font-size: 20px;
+      font-weight: bold;
+      color: #FFFFFF;
+      text-shadow: 0 1px 0 #ffffff;
+      /* opacity: 0.8; */
+    }
+    .toast-close-button:hover,
+    .toast-close-button:focus {
+      color: #000000;
+      text-decoration: none;
+      cursor: pointer;
+      opacity: 0.4;
+    }
+    /*Additional properties for button version
+     iOS requires the button element instead of an anchor tag.
+     If you want the anchor version, it requires `href="#"`.*/
+    button.toast-close-button {
+      padding: 0;
+      cursor: pointer;
+      background: transparent;
+      border: 0;
+    }
+    .toast-container {
+      pointer-events: none;
+      position: fixed;
+      z-index: 999999;
+    }
+    .toast-container * {
+      box-sizing: border-box;
+    }
+    .toast-container .ngx-toastr {
+      position: relative;
+      overflow: hidden;
+      margin: 0 0 6px;
+      padding: 15px 15px 15px 50px;
+      width: 450px;
+      border-radius: 3px 3px 3px 3px;
+      background-position: 15px center;
+      background-repeat: no-repeat;
+      background-size: 24px;
+      box-shadow: 0 0 12px #999999;
+      color: #FFFFFF;
+      opacity: .7;
+    }
+    .toast-container .ngx-toastr:hover {
+      box-shadow: 0 0 12px #000000;
+      opacity: 1;
+      cursor: pointer;
+    }
+    /* https://github.com/FortAwesome/Font-Awesome-Pro/blob/master/advanced-options/raw-svg/regular/info-circle.svg */
+    .toast-info {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Cpath fill='rgb(255,255,255)' d='M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z'/%3E%3C/svg%3E");
+    }
+    /* https://github.com/FortAwesome/Font-Awesome-Pro/blob/master/advanced-options/raw-svg/regular/times-circle.svg */
+    .toast-error {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Cpath fill='rgb(255,255,255)' d='M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8zm121.6 313.1c4.7 4.7 4.7 12.3 0 17L338 377.6c-4.7 4.7-12.3 4.7-17 0L256 312l-65.1 65.6c-4.7 4.7-12.3 4.7-17 0L134.4 338c-4.7-4.7-4.7-12.3 0-17l65.6-65-65.6-65.1c-4.7-4.7-4.7-12.3 0-17l39.6-39.6c4.7-4.7 12.3-4.7 17 0l65 65.7 65.1-65.6c4.7-4.7 12.3-4.7 17 0l39.6 39.6c4.7 4.7 4.7 12.3 0 17L312 256l65.6 65.1z'/%3E%3C/svg%3E");
+    }
+    /* https://github.com/FortAwesome/Font-Awesome-Pro/blob/master/advanced-options/raw-svg/regular/check.svg */
+    .toast-success {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512' width='512' height='512'%3E%3Cpath fill='rgb(255,255,255)' d='M173.898 439.404l-166.4-166.4c-9.997-9.997-9.997-26.206 0-36.204l36.203-36.204c9.997-9.998 26.207-9.998 36.204 0L192 312.69 432.095 72.596c9.997-9.997 26.207-9.997 36.204 0l36.203 36.204c9.997 9.997 9.997 26.206 0 36.204l-294.4 294.401c-9.998 9.997-26.207 9.997-36.204-.001z'/%3E%3C/svg%3E");
+    }
+    /* https://github.com/FortAwesome/Font-Awesome-Pro/blob/master/advanced-options/raw-svg/regular/exclamation-triangle.svg */
+    .toast-warning {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512' width='576' height='512'%3E%3Cpath fill='rgb(255,255,255)' d='M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z'/%3E%3C/svg%3E");
+    }
+    .toast-container.toast-top-center .ngx-toastr,
+    .toast-container.toast-bottom-center .ngx-toastr {
+      width: 300px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .toast-container.toast-top-full-width .ngx-toastr,
+    .toast-container.toast-bottom-full-width .ngx-toastr {
+      width: 96%;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .ngx-toastr {
+      background-color: #030303;
+      pointer-events: auto;
+    }
+    .toast-success {
+      /*background-color: #51A351;*/
+      background-color: rgba(81,163,81, 0.7);
+    }
+    .toast-error {
+      background-color: #BD362F;
+    }
+    .toast-info {
+      background-color: #2F96B4;
+    }
+    .toast-warning {
+      background-color: #F89406;
+    }
+    .toast-progress {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 4px;
+      background-color: #000000;
+      opacity: 0.4;
+    }
+    /* Responsive Design */
+    @media all and (max-width: 240px) {
+      .toast-container .ngx-toastr.div {
+        padding: 8px 8px 8px 50px;
+        width: 11em;
+      }
+      .toast-container .toast-close-button {
+        right: -0.2em;
+        top: -0.2em;
+      }
+    }
+    @media all and (min-width: 241px) and (max-width: 480px) {
+      .toast-container .ngx-toastr.div {
+        padding: 8px 8px 8px 50px;
+        width: 18em;
+      }
+      .toast-container .toast-close-button {
+        right: -0.2em;
+        top: -0.2em;
+      }
+    }
+    @media all and (min-width: 481px) and (max-width: 768px) {
+      .toast-container .ngx-toastr.div {
+        padding: 15px 15px 15px 50px;
+        width: 25em;
+      }
+    }
 
-    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-    <link href="portfolio.css" rel="stylesheet">
 
-    <title>Szymon Sadowski - Portfolio</title>
+    .ngx-toastr:nth-child(1) {
+      display: block !important;
+    }
 
-    <!--TODO: deploy on Github Pages-->
+    .ngx-toastr:nth-child(2) {
+      display: block !important;
+    }
+
+
+    .ngx-toastr {
+      display: none;
+    }
+
+
+
+    .ol-viewport {
+      display: none;
+    }
+    .ol-viewport:nth-child(1) {
+      display: block;
+    }
+
+  </style>
 </head>
-<body id="page-top">
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top" id="mainNav">
-    <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="#page-top">Szymon Sadowski</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-                data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false"
-                aria-label="Toggle navigation">
-            Menu
-            <i class="fas fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav text-uppercase ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#technologies">Technologies I know</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#projects">My projects</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#about_me">About me</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link js-scroll-trigger" href="#social_media">Social Media</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+<body>
+  <aplikacja-wycieczki></aplikacja-wycieczki>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+          integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+          integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+          crossorigin="anonymous"></script>
+  <script src="https://use.fontawesome.com/c560c025cf.js"></script>
+  <script src="https://openlayers.org/en/v4.6.5/build/ol.js" type="text/javascript"></script>
+  <script>
+    setInterval(function() {
 
-<!-- Header -->
-<header class="masthead">
-    <div class="container">
-        <div class="intro-text">
-            <div class="intro-lead-in">Welcome to my portfolio!</div>
-            <div class="intro-heading">Thank you for visiting</div>
-            <a class="btn btn-primary btn-xl text-uppercase js-scroll-trigger see-projects-button" href="#projects">See
-                my projects</a>
-        </div>
-    </div>
-</header>
-
-<section class="technologies-section" id="technologies">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 text-center">
-                <h2 class="section-heading text-uppercase">Technologies...</h2>
-                <h3 class="section-subheading">...which I use in my everyday work</h3>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="row text-center">
-            <div class="col-md-3 technologies-entry">
-          <span class="fa-stack fa-4x">
-            <i class="fas fa-circle fa-stack-2x text-primary"></i>
-            <i class="fas fa-laptop fa-stack-1x fa-inverse"></i>
-          </span>
-                <h4 class="service-heading">Front-end</h4>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">JavaScript (ES5 & ES6 standard)</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">CSS3</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Bootstrap framework</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Sass</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">React.js</li>
-                </ul>
-            </div>
-            <div class="col-md-3 technologies-entry">
-          <span class="fa-stack fa-4x">
-            <i class="fas fa-circle fa-stack-2x text-primary"></i>
-            <i class="fas fa-keyboard fa-stack-1x fa-inverse"></i>
-          </span>
-                <h4 class="service-heading">Backend</h4>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Java (with Spring framework)</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Python</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Cloud computing (especially AWS)</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">C/C++</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Node.js</li>
-                </ul>
-            </div>
-            <div class="col-md-3 technologies-entry">
-          <span class="fa-stack fa-4x">
-            <i class="fas fa-circle fa-stack-2x text-primary"></i>
-            <i class="fas fa-database fa-stack-1x fa-inverse"></i>
-          </span>
-                <h4 class="service-heading">Data</h4>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Relational Databases (PostgreSQL, Oracle database)</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Non-relational databases (HBase, Mongo, DynamoDB)</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">ElasticSearch</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">ETL (sqoop, spark)</li>
-                </ul>
-            </div>
-            <div class="col-md-3 technologies-entry">
-          <span class="fa-stack fa-4x">
-            <i class="fas fa-circle fa-stack-2x text-primary"></i>
-            <i class="fas fa-robot fa-stack-1x fa-inverse"></i>
-          </span>
-                <h4 class="service-heading">Machine Learning</h4>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Python Pandas</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Python Jupyter notebooks</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Python scikit-learn</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Weka</li>
-                </ul>
-                <ul class="list-group">
-                    <li class="list-group-item list-group-item-dark">Genetic algorithms</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="projects-section" id="projects">
-    <div class="container-fluid">
-        <h2 class="text-center">Projects</h2>
-        <div id="myCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner row w-100 mx-auto">
-                <div class="carousel-item col-md-4 active">
-                    <div class="card">
-                        <div class="spring-card"></div>
-                        <div class="card-body">
-                            <h4 class="card-title">Spring long-polling</h4>
-                            <p class="card-text">This project is an implementation of the server-push mechanism with the use of long-polling technique - designed for Spring Framework.</p>
-                            <div class="repository-button"><a class="btn btn-primary btn-xl text-uppercase" target="_blank" rel="noopener noreferrer" href="https://github.com/szymonsadowski3/SpringLongPolling">Go to repository</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item col-md-4">
-                    <div class="card">
-                        <div class="draughts-card"></div>
-                        <div class="card-body">
-                            <h4 class="card-title">Distributed draughts</h4>
-                            <p class="card-text">This project is an implementation of distributed draught engine coded in Erlang</p>
-                            <div class="repository-button"><a class="btn btn-primary btn-xl text-uppercase" target="_blank" rel="noopener noreferrer" href="https://github.com/szymonsadowski3/DistributedDraughts">Go to repository</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item col-md-4">
-                    <div class="card">
-                        <div class="nano-server-card"></div>
-                        <div class="card-body">
-                            <h4 class="card-title">Nano Http Server (Java)</h4>
-                            <p class="card-text">Miniature server, which can receive GET Image or Text requests and return Image/Text resources</p>
-                            <div class="repository-button"><a class="btn btn-primary btn-xl text-uppercase" target="_blank" rel="noopener noreferrer" href="https://github.com/szymonsadowski3/Nano-server">Go to repository</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="carousel-item col-md-4">
-                    <div class="card">
-                        <div class="game-of-life-card"></div>
-                        <div class="card-body">
-                            <h4 class="card-title">Conway's game of life</h4>
-                            <p class="card-text">Client-server implementation of Conway's game of life in Flask and JavaScript.</p>
-                            <div class="repository-button"><a class="btn btn-primary btn-xl text-uppercase" target="_blank" rel="noopener noreferrer" href="https://github.com/szymonsadowski3/FlaskGameOfLife">Go to repository</a></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#myCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
-        </div>
-    </div>
-</section>
-
-<div class="code-img-section"></div>
-
-<section class="about-me-section" id="about_me">
-    <div class="col-lg-12 text-center">
-        <h2 class="section-heading text-uppercase">About me...</h2>
-        <h3 class="section-subheading">...things I like to do in my free time</h3>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-
-            <div id="mdb-lightbox-ui"></div>
-
-            <div class="gallery-wrapper no-margin">
-
-                <div class="row">
-                    <figure class="col-md-4">
-                        <a href="https://images.unsplash.com/photo-1545379606-31c18df57a11?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=600&q=80">
-                            <img alt="picture" src="https://images.unsplash.com/photo-1545379606-31c18df57a11?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=366&q=80"
-                                 class="img-fluid grid-img">
-                        </a>
-
-                        <figcaption class="figure-caption">
-                            Ballroom dancing
-                        </figcaption>
-                    </figure>
-
-                    <figure class="col-md-4">
-                        <a href="https://images.unsplash.com/photo-1541625602330-2277a4c46182?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" data-size="1600x1067">
-                            <img alt="picture" src="https://images.unsplash.com/photo-1541625602330-2277a4c46182?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-                                 class="img-fluid grid-img" />
-                        </a>
-
-                        <figcaption class="figure-caption">
-                            Cycling
-                        </figcaption>
-                    </figure>
-
-                    <figure class="col-md-4">
-                        <a href="https://images.unsplash.com/photo-1461748659110-16121c049d52?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" data-size="1600x1067">
-                            <img alt="picture" src="https://images.unsplash.com/photo-1461748659110-16121c049d52?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-                                 class="img-fluid grid-img" />
-                        </a>
-
-                        <figcaption class="figure-caption">
-                            Table tennis
-                        </figcaption>
-                    </figure>
-                </div>
-
-                <div class="row">
-                    <figure class="col-md-4">
-                        <a href="https://images.unsplash.com/photo-1564322713770-96dc62be179b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" data-size="1600x1067">
-                            <img alt="picture" src="https://images.unsplash.com/photo-1564322713770-96dc62be179b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-                                 class="img-fluid grid-img" />
-                        </a>
-
-                        <figcaption class="figure-caption">
-                            Sauna
-                        </figcaption>
-                    </figure>
-
-                    <figure class="col-md-4">
-                        <a href="https://images.unsplash.com/photo-1466637574441-749b8f19452f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80" data-size="1600x1067">
-                            <img alt="picture" src="https://images.unsplash.com/photo-1466637574441-749b8f19452f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=80"
-                                 class="img-fluid grid-img" />
-                        </a>
-
-                        <figcaption class="figure-caption">
-                            Cooking
-                        </figcaption>
-                    </figure>
-
-                    <figure class="col-md-4">
-                        <a href="https://images.unsplash.com/photo-1545809074-59472b3f5ecc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" data-size="1600x1067">
-                            <img alt="picture" src="https://images.unsplash.com/photo-1545809074-59472b3f5ecc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-                                 class="img-fluid grid-img" />
-                        </a>
-
-                        <figcaption class="figure-caption">
-                            Tennis
-                        </figcaption>
-                    </figure>
-                </div>
-
-                <div class="row">
-                    <figure class="col-md-4">
-                        <a href="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" data-size="1600x1067">
-                            <img alt="picture" src="https://images.unsplash.com/photo-1551632811-561732d1e306?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-                                 class="img-fluid grid-img" />
-                        </a>
-
-                        <figcaption class="figure-caption">
-                            Hiking
-                        </figcaption>
-                    </figure>
-
-                    <figure class="col-md-4">
-                        <a href="https://images.unsplash.com/photo-1487724448953-a9d9963d71ae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1381&q=80" data-size="1600x1067">
-                            <img alt="picture" src="https://images.unsplash.com/photo-1487724448953-a9d9963d71ae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1381&q=80"
-                                 class="img-fluid grid-img" />
-                        </a>
-
-                        <figcaption class="figure-caption">
-                            Listening to audiobooks
-                        </figcaption>
-                    </figure>
-
-                    <figure class="col-md-4">
-                        <a href="https://images.unsplash.com/photo-1520092352425-9699926a9b0b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" data-size="1600x1067">
-                            <img alt="picture" src="https://images.unsplash.com/photo-1520092352425-9699926a9b0b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
-                                 class="img-fluid grid-img" />
-                        </a>
-
-                        <figcaption class="figure-caption">
-                            Playing games
-                        </figcaption>
-                    </figure>
-                </div>
-
-            </div>
-
-        </div>
-    </div>
-</section>
-
-<section class="contact-section" id="contact">
-    <div class="col-lg-12 text-center">
-        <h2 class="section-heading text-uppercase">Contact</h2>
-        <h3 class="section-subheading">Feel free to reach out to me</h3>
-    </div>
-
-    <div class="row text-center">
-        <div class="col-sm-4">
-          <span class="fa-stack fa-4x">
-            <i class="fas fa-circle fa-stack-2x text-primary"></i>
-            <i class="fas fa-envelope-square fa-stack-1x fa-inverse"></i>
-          </span>
-
-            <p>szymonsadowski3@gmail.com</p>
-        </div>
-        <div class="col-sm-4">
-          <span class="fa-stack fa-4x">
-            <i class="fas fa-circle fa-stack-2x text-primary"></i>
-            <i class="fas fa-phone fa-stack-1x fa-inverse"></i>
-          </span>
-
-            <p>(+48) 798248100</p>
-        </div>
-        <div class="col-sm-4">
-          <span class="fa-stack fa-4x">
-            <i class="fas fa-circle fa-stack-2x text-primary"></i>
-            <i class="fas fa-home fa-stack-1x fa-inverse"></i>
-          </span>
-
-            <p>Kamienica 608, 34-608 Kamienica, Poland</p>
-        </div>
-    </div>
-</section>
-
-<section class="social-media-section" id="social_media">
-    <h2 class="text-center">My social media</h2>
-
-    <div class="row">
-        <div class="col-sm-3 text-center social-media-icon">
-            <span class="fa-stack fa-4x">
-                <i class="fas fa-stack-2x"></i>
-                <i class="fab fa-linkedin fa-stack-1x fa-inverse"></i>
-            </span>
-
-            <p class="text-center social-media-label">LinkedIn</p>
-        </div>
-
-        <div class="col-sm-3 text-center social-media-icon">
-            <span class="fa-stack fa-4x">
-                <i class="fas fa-stack-2x"></i>
-                <i class="fab fa-facebook fa-stack-1x fa-inverse"></i>
-            </span>
-
-            <p class="text-center social-media-label">Facebook</p>
-        </div>
-
-        <div class="col-sm-3 text-center social-media-icon">
-            <span class="fa-stack fa-4x">
-                <i class="fas fa-stack-2x"></i>
-                <i class="fab fa-youtube fa-stack-1x fa-inverse"></i>
-            </span>
-
-            <p class="text-center social-media-label">YouTube</p>
-        </div>
-
-        <div class="col-sm-3 text-center social-media-icon">
-            <span class="fa-stack fa-4x">
-                <i class="fas fa-stack-2x"></i>
-                <i class="fab fa-instagram fa-stack-1x fa-inverse"></i>
-            </span>
-
-            <p class="text-center social-media-label">Instagram</p>
-        </div>
-    </div>
-
-</section>
-
-
-<footer class="page-footer font-small blue">
-    <div class="footer-copyright text-center py-3">© 2019 Copyright:
-        <a href="#page-top"> Szymon Sadowski</a>
-    </div>
-</footer>
-
-
-<!-- Optional JavaScript -->
-<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-        crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-        crossorigin="anonymous"></script>
-<script>
-    $(document).ready(function() {
-        $("#myCarousel").on("slide.bs.carousel", function(e) {
-            var $e = $(e.relatedTarget);
-            var idx = $e.index();
-            var itemsPerSlide = 3;
-            var totalItems = $(".carousel-item").length;
-
-            if (idx >= totalItems - (itemsPerSlide - 1)) {
-                var it = itemsPerSlide - (totalItems - idx);
-                for (var i = 0; i < it; i++) {
-                    // append slides to end
-                    if (e.direction == "left") {
-                        $(".carousel-item")
-                            .eq(i)
-                            .appendTo(".carousel-inner");
-                    } else {
-                        $(".carousel-item")
-                            .eq(0)
-                            .appendTo($(this).find(".carousel-inner"));
-                    }
-                }
-            }
-        });
-    });
-
-</script>
-</body>
+    }, 1000);
+  </script>
+<script src="runtime-es2015.js" type="module"></script><script src="runtime-es5.js" nomodule defer></script><script src="polyfills-es5.js" nomodule defer></script><script src="polyfills-es2015.js" type="module"></script><script src="styles-es2015.js" type="module"></script><script src="styles-es5.js" nomodule defer></script><script src="vendor-es2015.js" type="module"></script><script src="vendor-es5.js" nomodule defer></script><script src="main-es2015.js" type="module"></script><script src="main-es5.js" nomodule defer></script></body>
 </html>
